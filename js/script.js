@@ -10,7 +10,7 @@ html.setAttribute('data-theme', savedTheme);
 if (themeToggle) {
     themeToggle.addEventListener('click', () => {
         const currentTheme = html.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        const newTheme = currentTheme === 'light' ? 'light' : 'dark';
 
         html.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
