@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - NaqshSoft</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 12px 28px;
+            border-radius: 50px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .portfolio-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            transition: var(--transition);
+        }
+        .portfolio-card:hover {
+            transform: translateY(-8px);
+        }
+        .portfolio-image {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: rgba(255,255,255,0.3);
+            position: relative;
+        }
+        .portfolio-info {
+            padding: 30px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            padding: 50px !important;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            font-weight: 300;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">NaqshSoft</a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Asosiy</a></li>
+                <li><a href="about.html" class="nav-link">Biz haqimizda</a></li>
+                <li><a href="services.html" class="nav-link">Xizmatlar</a></li>
+                <li><a href="portfolio.html" class="nav-link active">Portfolio</a></li>
+                <li><a href="contact.html" class="nav-link">Kontakt</a></li>
+                <li><div class="theme-toggle"><div class="theme-toggle-circle"></div></div></li>
+                <li><a href="contact.html" class="btn btn-primary">Bog'lanish</a></li>
+            </ul>
+            
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <section class="section" style="padding-top: 140px; padding-bottom: 60px;">
+        <div class="container" style="text-align: center;">
+            <h1 class="fade-in" style="margin-bottom: 24px;">Bizning Loyihalar</h1>
+            <p class="fade-in" style="font-size: 1.3rem; max-width: 700px; margin: 0 auto;">
+                Biz amalga oshirgan eng so'nggi muvaffaqiyatli loyihalar
+            </p>
+        </div>
+    </section>
+
+    <!-- FILTERS -->
+    <section style="padding-bottom: 40px;">
+        <div class="container">
+            <div class="filter-buttons fade-in">
+                <button class="filter-btn active" data-filter="all">Barchasi</button>
+                <button class="filter-btn" data-filter="erp">ERP Tizimlar</button>
+                <button class="filter-btn" data-filter="crm">CRM Tizimlar</button>
+                <button class="filter-btn" data-filter="mobile">Mobil Ilovalar</button>
+                <button class="filter-btn" data-filter="web">Web Saytlar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO GRID -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="grid grid-3" id="portfolio-grid">
+                
+                <!-- Project 1 - ERP -->
+                <div class="portfolio-card card glass fade-in" data-category="erp">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #0071E3 0%, #0A84FF 100%);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">FinTech ERP System</h3>
+                        <p style="margin-bottom: 16px;">Moliya sektorida to'liq avtomatlashtirish tizimi. Buxgalteriya, ombor va hisobotlar bir joyda.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">ERP</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Moliya</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Laravel</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project1')">Ko'rish</button>
+                    </div>
+                </div>
+
+                <!-- Project 2 - CRM -->
+                <div class="portfolio-card card glass fade-in" data-category="crm">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">Sales CRM Platform</h3>
+                        <p style="margin-bottom: 16px;">Sotuv bo'limi uchun CRM tizimi. Lidlar, mijozlar va hisobotlarni boshqarish.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">CRM</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Sotuv</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Django</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project2')">Ko'rish</button>
+                    </div>
+                </div>
+
+                <!-- Project 3 - Mobile -->
+                <div class="portfolio-card card glass fade-in" data-category="mobile">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">Taxi Aggregator App</h3>
+                        <p style="margin-bottom: 16px;">Taksi agregator ilovasi. Haydovchilar va yo'lovchilar uchun qulay interfeys.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Mobile</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Transport</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Flutter</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project3')">Ko'rish</button>
+                    </div>
+                </div>
+
+                <!-- Project 4 - Web -->
+                <div class="portfolio-card card glass fade-in" data-category="web">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">E-Commerce Platform</h3>
+                        <p style="margin-bottom: 16px;">Zamonaviy onlayn savdo platformasi. To'lov tizimlari va admin panel.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Web</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">E-Commerce</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">React</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project4')">Ko'rish</button>
+                    </div>
+                </div>
+
+                <!-- Project 5 - CRM -->
+                <div class="portfolio-card card glass fade-in" data-category="crm">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);">
+                        <i class="fas fa-clinic-medical"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">MedCRM System</h3>
+                        <p style="margin-bottom: 16px;">Tibbiyot muassasalari uchun CRM. Bemorlar va navbatlarni boshqarish.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">CRM</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Tibbiyot</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Laravel</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project5')">Ko'rish</button>
+                    </div>
+                </div>
+
+                <!-- Project 6 - Mobile -->
+                <div class="portfolio-card card glass fade-in" data-category="mobile">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">EduCenter Mobile App</h3>
+                        <p style="margin-bottom: 16px;">Ta'lim markazi uchun mobil ilova. Darslar, o'qituvchilar va to'lovlar.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Mobile</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Ta'lim</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">React Native</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project6')">Ko'rish</button>
+                    </div>
+                </div>
+
+                <!-- Project 7 - ERP -->
+                <div class="portfolio-card card glass fade-in" data-category="erp">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
+                        <i class="fas fa-warehouse"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">Warehouse Management</h3>
+                        <p style="margin-bottom: 16px;">Ombor boshqaruvi tizimi. Mahsulotlar, kirim-chiqim va hisobotlar.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">ERP</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Ombor</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Python</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project7')">Ko'rish</button>
+                    </div>
+                </div>
+
+                <!-- Project 8 - Web -->
+                <div class="portfolio-card card glass fade-in" data-category="web">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">Hotel Booking System</h3>
+                        <p style="margin-bottom: 16px;">Mehmonxona bron qilish tizimi. Xonalar, mijozlar va to'lovlar.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Web</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Turizm</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Next.js</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project8')">Ko'rish</button>
+                    </div>
+                </div>
+
+                <!-- Project 9 - Web -->
+                <div class="portfolio-card card glass fade-in" data-category="web">
+                    <div class="portfolio-image" style="background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 style="margin-bottom: 12px;">Restaurant Website</h3>
+                        <p style="margin-bottom: 16px;">Restoran uchun zamonaviy web sayt. Menyu, buyurtma va bron qilish.</p>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Web</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">Restoran</span>
+                            <span style="background: var(--bg-secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;">WordPress</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('project9')">Ko'rish</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="card glass fade-in" style="text-align: center; padding: 80px 40px;">
+                <h2 style="margin-bottom: 24px;">Sizning loyihangiz keyingisi bo'lishi mumkin</h2>
+                <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px;">
+                    Biz bilan bog'laning va loyihangizni muhokama qilaylik
+                </p>
+                <a href="contact.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 16px 40px;">
+                    Bog'lanish
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECT DETAIL MODAL -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content card glass">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h4>NaqshSoft</h4>
+                    <p style="margin-top: 16px;">Biznesingizni avtomatlashtirish va raqamlashtirish bo'yicha ishonchli hamkor.</p>
+                </div>
+                <div>
+                    <h4>Kompaniya</h4>
+                    <a href="about.html">Biz haqimizda</a>
+                    <a href="portfolio.html">Loyihalar</a>
+                    <a href="contact.html">Kontaktlar</a>
+                </div>
+                <div>
+                    <h4>Xizmatlar</h4>
+                    <a href="services.html">ERP Tizimlar</a>
+                    <a href="services.html">CRM Tizimlar</a>
+                    <a href="services.html">Mobil Ilovalar</a>
+                    <a href="services.html">Web Saytlar</a>
+                </div>
+                <div>
+                    <h4>Bog'lanish</h4>
+                    <a href="tel:+998901234567">+998 90 123 45 67</a>
+                    <a href="mailto:info@naqshsoft.uz">info@naqshsoft.uz</a>
+                    <p style="margin-top: 12px;">Toshkent sh., Chilonzor tumani</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2024 NaqshSoft. Barcha huquqlar himoyalangan.
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Project Details Data
+        const projectData = {
+            project1: {
+                title: "FinTech ERP System",
+                category: "ERP Tizim",
+                client: "FinanceHub LLC",
+                date: "2023-yil, Dekabr",
+                tech: ["Laravel", "Vue.js", "PostgreSQL", "Redis"],
+                description: "Moliya sektorida faoliyat yurituvchi kompaniya uchun to'liq ERP tizimi. Buxgalteriya, ombor, HR va hisobotlarni bir joyda boshqarish imkoniyati.",
+                features: [
+                    "Buxgalteriya va moliyaviy hisobotlar",
+                    "Ombor boshqaruvi va inventarizatsiya",
+                    "HR moduli va ish haqi hisoblash",
+                    "Real-time dashboard va analytics",
+                    "Multi-currency support",
+                    "Avtomatik backup va xavfsizlik"
+                ],
+                results: [
+                    "Hisob-kitob jarayonlari 70% tezlashdi",
+                    "Xatolar 85% kamaydi",
+                    "Oylik hisobotlar 5 daqiqada tayyor"
+                ]
+            },
+            project2: {
+                title: "Sales CRM Platform",
+                category: "CRM Tizim",
+                client: "SalesBoost Inc",
+                date: "2024-yil, Yanvar",
+                tech: ["Django", "React", "MySQL", "Celery"],
+                description: "Sotuv bo'limi uchun professional CRM platformasi. Lidlarni boshqarish, mijozlar bazasi va sotuv voronkasini kuzatish.",
+                features: [
+                    "Lid boshqaruvi va tracking",
+                    "Mijozlar bazasi (CRM)",
+                    "Sotuv voronkasi va analytics",
+                    "Email va SMS integratsiya",
+                    "Task management",
+                    "Avtomatik eslatmalar"
+                ],
+                results: [
+                    "Sotuv 45% oshdi",
+                    "Lid konversiyasi 60% yaxshilandi",
+                    "Mijozlar bilan ishlash samaradorligi 3x oshdi"
+                ]
+            },
+            project3: {
+                title: "Taxi Aggregator App",
+                category: "Mobil Ilova",
+                client: "QuickRide",
+                date: "2023-yil, Oktabr",
+                tech: ["Flutter", "Firebase", "Google Maps API", "Node.js"],
+                description: "Taksi agregator mobil ilovasi. Haydovchilar va yo'lovchilar uchun qulay interfeys, real-time tracking va to'lov tizimlari.",
+                features: [
+                    "Real-time GPS tracking",
+                    "Haydovchi va yo'lovchi ilovasi",
+                    "To'lov tizimlari integratsiyasi",
+                    "Rating va review tizimi",
+                    "Push notifications",
+                    "Promo kod va chegirmalar"
+                ],
+                results: [
+                    "10,000+ yuklab olish (birinchi oyda)",
+                    "4.8 ⭐ rating App Store'da",
+                    "Kunlik 500+ sayohat"
+                ]
+            },
+            project4: {
+                title: "E-Commerce Platform",
+                category: "Web Sayt",
+                client: "ShopHub",
+                date: "2024-yil, Fevral",
+                tech: ["React", "Next.js", "Stripe", "MongoDB"],
+                description: "Zamonaviy onlayn savdo platformasi. Admin panel, to'lov tizimlari va yetkazib berish integratsiyasi.",
+                features: [
+                    "Mahsulot katalogi va qidiruv",
+                    "Savat va checkout",
+                    "To'lov tizimlari (Stripe, PayPal)",
+                    "Admin panel",
+                    "Buyurtmalarni kuzatish",
+                    "SEO optimizatsiya"
+                ],
+                results: [
+                    "Oylik 50,000$ savdo",
+                    "1000+ faol foydalanuvchi",
+                    "Conversion rate 3.5%"
+                ]
+            },
+            project5: {
+                title: "MedCRM System",
+                category: "CRM Tizim",
+                client: "HealthCare Clinic",
+                date: "2023-yil, Sentyabr",
+                tech: ["Laravel", "MySQL", "Twilio", "Chart.js"],
+                description: "Tibbiyot muassasalari uchun CRM. Bemorlar bazasi, navbatlar va tibbiy kartalar.",
+                features: [
+                    "Bemorlar bazasi",
+                    "Navbat boshqaruvi",
+                    "Tibbiy kartalar",
+                    "SMS eslatmalar",
+                    "Hisobotlar va statistika",
+                    "Shifokorlar uchun dashboard"
+                ],
+                results: [
+                    "Navbat vaqti 40% qisqardi",
+                    "Bemorlar qoniqishi 90%+",
+                    "Qog'oz ishlatish 80% kamaydi"
+                ]
+            },
+            project6: {
+                title: "EduCenter Mobile App",
+                category: "Mobil Ilova",
+                client: "SmartEdu Center",
+                date: "2024-yil, Mart",
+                tech: ["React Native", "Firebase", "Stripe", "Node.js"],
+                description: "Ta'lim markazi uchun mobil ilova. Darslar jadvali, o'qituvchilar va to'lovlar.",
+                features: [
+                    "Darslar jadvali",
+                    "O'qituvchilar ro'yxati",
+                    "To'lovlar tarixi",
+                    "Baholar va natijalar",
+                    "Push notifications",
+                    "Video darslar"
+                ],
+                results: [
+                    "500+ o'quvchi foydalanmoqda",
+                    "To'lovlar 95% onlayn",
+                    "Ota-onalar qoniqishi yuqori"
+                ]
+            },
+            project7: {
+                title: "Warehouse Management",
+                category: "ERP Tizim",
+                client: "LogisticsPro",
+                date: "2023-yil, Avgust",
+                tech: ["Python", "Django", "PostgreSQL", "Barcode Scanner"],
+                description: "Ombor boshqaruvi tizimi. Mahsulotlar, kirim-chiqim va inventarizatsiya.",
+                features: [
+                    "Mahsulotlar bazasi",
+                    "Kirim-chiqim nazorati",
+                    "Barcode scanning",
+                    "Inventarizatsiya",
+                    "Hisobotlar",
+                    "Multi-warehouse support"
+                ],
+                results: [
+                    "Inventarizatsiya vaqti 60% qisqardi",
+                    "Xatolar 90% kamaydi",
+                    "Samaradorlik 2x oshdi"
+                ]
+            },
+            project8: {
+                title: "Hotel Booking System",
+                category: "Web Sayt",
+                client: "LuxuryStay Hotels",
+                date: "2024-yil, Aprel",
+                tech: ["Next.js", "Prisma", "Stripe", "Cloudinary"],
+                description: "Mehmonxona bron qilish tizimi. Xonalar, mijozlar va to'lovlar boshqaruvi.",
+                features: [
+                    "Xonalarni bron qilish",
+                    "To'lov tizimlari",
+                    "Mijozlar bazasi",
+                    "Admin panel",
+                    "Email tasdiqlash",
+                    "Rasmlar galereyasi"
+                ],
+                results: [
+                    "Bron qilish 50% oshdi",
+                    "Onlayn to'lovlar 80%",
+                    "Mijozlar qoniqishi 95%"
+                ]
+            },
+            project9: {
+                title: "Restaurant Website",
+                category: "Web Sayt",
+                client: "Gourmet Bistro",
+                date: "2023-yil, Iyul",
+                tech: ["WordPress", "WooCommerce", "Elementor", "PHP"],
+                description: "Restoran uchun zamonaviy web sayt. Menyu, buyurtma va bron qilish imkoniyati.",
+                features: [
+                    "Menyu katalogi",
+                    "Onlayn buyurtma",
+                    "Stol bron qilish",
+                    "Galeriya",
+                    "Kontakt forma",
+                    "Google Maps"
+                ],
+                results: [
+                    "Onlayn buyurtmalar 40% oshdi",
+                    "Sayt trafigi 3x oshdi",
+                    "Bron qilish oson va tez"
+                ]
+            }
+        };
+
+        // Open Modal Function
+        function openModal(projectId) {
+            const modal = document.getElementById('projectModal');
+            const modalBody = document.getElementById('modalBody');
+            const project = projectData[projectId];
+
+            if (!project) return;
+
+            modalBody.innerHTML = `
+                <h2 style="margin-bottom: 16px; font-size: 2.5rem;">${project.title}</h2>
+                <div style="display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <span style="background: var(--accent); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;">${project.category}</span>
+                    <span style="background: var(--bg-secondary); padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;">${project.date}</span>
+                </div>
+
+                <div style="margin-bottom: 40px;">
+                    <h3 style="margin-bottom: 16px; font-size: 1.5rem;">Loyiha haqida</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.8;">${project.description}</p>
+                </div>
+
+                <div style="margin-bottom: 40px;">
+                    <h3 style="margin-bottom: 16px; font-size: 1.5rem;">Texnologiyalar</h3>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        ${project.tech.map(t => `<span style="background: var(--bg-secondary); padding: 10px 20px; border-radius: 12px; font-size: 1rem;">${t}</span>`).join('')}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 40px;">
+                    <h3 style="margin-bottom: 16px; font-size: 1.5rem;">Asosiy funksiyalar</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        ${project.features.map(f => `
+                            <li style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-check-circle" style="color: var(--accent); font-size: 1.2rem;"></i>
+                                <span style="font-size: 1.05rem;">${f}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+
+                <div style="background: var(--bg-secondary); padding: 30px; border-radius: 16px;">
+                    <h3 style="margin-bottom: 20px; font-size: 1.5rem;">Natijalar</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        ${project.results.map(r => `
+                            <li style="padding: 10px 0; display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-chart-line" style="color: var(--accent); font-size: 1.2rem;"></i>
+                                <span style="font-size: 1.05rem; font-weight: 500;">${r}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+
+                <div style="margin-top: 40px; text-align: center;">
+                    <a href="contact.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 16px 40px;">
+                        Shunga o'xshash loyiha buyurtma qilish
+                    </a>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Modal Function
+        function closeModal() {
+            const modal = document.getElementById('projectModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on outside click
+        document.getElementById('projectModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Portfolio Filter
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+
+                portfolioItems.forEach(item => {
+                    const category = item.getAttribute('data-category');
+                    
+                    if (filter === 'all' || category === filter) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin Panel</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="sidebar-logo">NaqshSoft</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="projects.html" class="nav-item">
+                    <i class="fas fa-folder"></i>
+                    <span>Loyihalar</span>
+                </a>
+                <a href="messages.html" class="nav-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Xabarlar</span>
+                    <span id="unreadBadge" style="background: #f44; color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; margin-left: auto;"></span>
+                </a>
+                <a href="../index.html" class="nav-item" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    <span>Saytni ko'rish</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <h1 class="topbar-title">Dashboard</h1>
+                <div class="topbar-actions">
+                    <div class="theme-toggle"><div class="theme-toggle-circle"></div></div>
+                    <button onclick="logout()" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Chiqish
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="admin-content">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="totalProjects">0</div>
+                                <div class="stat-label">Jami Loyihalar</div>
+                            </div>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #0071E3, #0A84FF);">
+                                <i class="fas fa-folder"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="erpProjects">0</div>
+                                <div class="stat-label">ERP Tizimlar</div>
+                            </div>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #059669);">
+                                <i class="fas fa-database"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="crmProjects">0</div>
+                                <div class="stat-label">CRM Tizimlar</div>
+                            </div>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="mobileProjects">0</div>
+                                <div class="stat-label">Mobil Ilovalar</div>
+                            </div>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div style="margin-bottom: 40px;">
+                    <h2 style="margin-bottom: 20px;">Tezkor Harakatlar</h2>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <a href="project-edit.html" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Yangi Loyiha
+                        </a>
+                        <a href="projects.html" class="btn btn-secondary">
+                            <i class="fas fa-list"></i> Barcha Loyihalar
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Recent Projects -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">So'nggi Loyihalar</h3>
+                        <a href="projects.html" class="btn btn-secondary">Barchasini ko'rish</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Loyiha Nomi</th>
+                                <th>Kategoriya</th>
+                                <th>Mijoz</th>
+                                <th>Sana</th>
+                                <th>Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentProjectsTable">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                                    Loyihalar yuklanmoqda...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+        
+        // Initialize demo data
+        initializeDemoData();
+        
+        // Load statistics
+        function loadStats() {
+            const stats = getStats();
+            document.getElementById('totalProjects').textContent = stats.totalProjects;
+            document.getElementById('erpProjects').textContent = stats.erpProjects;
+            document.getElementById('crmProjects').textContent = stats.crmProjects;
+            document.getElementById('mobileProjects').textContent = stats.mobileProjects;
+        }
+        
+        // Load recent projects
+        function loadRecentProjects() {
+            const projects = getProjects().slice(-5).reverse();
+            const tbody = document.getElementById('recentProjectsTable');
+            
+            if (projects.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            Hozircha loyihalar yo'q
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = projects.map(project => `
+                <tr>
+                    <td><strong>${project.title}</strong></td>
+                    <td><span style="background: var(--bg-secondary); padding: 4px 12px; border-radius: 12px; font-size: 0.85rem;">${project.category.toUpperCase()}</span></td>
+                    <td>${project.client}</td>
+                    <td>${project.date}</td>
+                    <td>
+                        <div class="table-actions">
+                            <a href="project-edit.html?id=${project.id}" class="btn-icon" title="Tahrirlash">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button onclick="deleteProjectConfirm('${project.id}')" class="btn-icon delete" title="O'chirish">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function deleteProjectConfirm(id) {
+            if (confirm('Loyihani o\'chirishni xohlaysizmi?')) {
+                deleteProject(id);
+                loadStats();
+                loadRecentProjects();
+            }
+        }
+        
+        // Load data on page load
+        loadStats();
+        loadRecentProjects();
+    </script>
+</body>
+</html>

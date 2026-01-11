@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loyihalar - Admin Panel</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="sidebar-logo">NaqshSoft</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="projects.html" class="nav-item active">
+                    <i class="fas fa-folder"></i>
+                    <span>Loyihalar</span>
+                </a>
+                <a href="../index.html" class="nav-item" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    <span>Saytni ko'rish</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <h1 class="topbar-title">Loyihalar</h1>
+                <div class="topbar-actions">
+                    <div class="theme-toggle"><div class="theme-toggle-circle"></div></div>
+                    <button onclick="logout()" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Chiqish
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="admin-content">
+                <!-- Projects Table -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Barcha Loyihalar</h3>
+                        <a href="project-edit.html" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Yangi Loyiha
+                        </a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Loyiha Nomi</th>
+                                <th>Kategoriya</th>
+                                <th>Mijoz</th>
+                                <th>Sana</th>
+                                <th>Texnologiyalar</th>
+                                <th>Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectsTable">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                                    Loyihalar yuklanmoqda...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+        
+        // Initialize demo data
+        initializeDemoData();
+        
+        // Load all projects
+        function loadProjects() {
+            const projects = getProjects();
+            const tbody = document.getElementById('projectsTable');
+            
+            if (projects.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 16px; display: block;"></i>
+                            Hozircha loyihalar yo'q. <a href="project-edit.html">Yangi loyiha qo'shing</a>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = projects.map((project, index) => `
+                <tr>
+                    <td><strong>#${index + 1}</strong></td>
+                    <td><strong>${project.title}</strong></td>
+                    <td>
+                        <span style="background: var(--accent); color: #fff; padding: 6px 14px; border-radius: 12px; font-size: 0.85rem;">
+                            ${project.category.toUpperCase()}
+                        </span>
+                    </td>
+                    <td>${project.client}</td>
+                    <td>${project.date}</td>
+                    <td>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            ${project.tech.slice(0, 3).map(t => `
+                                <span style="background: var(--bg-secondary); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem;">${t}</span>
+                            `).join('')}
+                            ${project.tech.length > 3 ? `<span style="color: var(--text-secondary); font-size: 0.8rem;">+${project.tech.length - 3}</span>` : ''}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-actions">
+                            <a href="project-edit.html?id=${project.id}" class="btn-icon" title="Tahrirlash">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button onclick="deleteProjectConfirm('${project.id}')" class="btn-icon delete" title="O'chirish">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function deleteProjectConfirm(id) {
+            if (confirm('Loyihani o\'chirishni xohlaysizmi? Bu amalni qaytarib bo\'lmaydi!')) {
+                deleteProject(id);
+                loadProjects();
+            }
+        }
+        
+        // Load projects on page load
+        loadProjects();
+    </script>
+</body>
+</html>

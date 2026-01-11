@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loyiha Tahrirlash - Admin Panel</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="sidebar-logo">NaqshSoft</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="projects.html" class="nav-item active">
+                    <i class="fas fa-folder"></i>
+                    <span>Loyihalar</span>
+                </a>
+                <a href="../index.html" class="nav-item" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    <span>Saytni ko'rish</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <h1 class="topbar-title" id="pageTitle">Yangi Loyiha</h1>
+                <div class="topbar-actions">
+                    <div class="theme-toggle"><div class="theme-toggle-circle"></div></div>
+                    <button onclick="logout()" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Chiqish
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="admin-content">
+                <div style="max-width: 900px;">
+                    <form id="projectForm" style="background: var(--bg-primary); padding: 40px; border-radius: 16px; border: 1px solid var(--border);">
+                        
+                        <div class="form-group">
+                            <label class="form-label">Loyiha Nomi *</label>
+                            <input type="text" class="form-input" id="title" placeholder="Masalan: FinTech ERP System" required>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label class="form-label">Kategoriya *</label>
+                                <select class="form-select" id="category" required>
+                                    <option value="">Tanlang</option>
+                                    <option value="erp">ERP Tizim</option>
+                                    <option value="crm">CRM Tizim</option>
+                                    <option value="mobile">Mobil Ilova</option>
+                                    <option value="web">Web Sayt</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Mijoz *</label>
+                                <input type="text" class="form-input" id="client" placeholder="Kompaniya nomi" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Sana *</label>
+                            <input type="text" class="form-input" id="date" placeholder="2024-01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Texnologiyalar (vergul bilan ajrating) *</label>
+                            <input type="text" class="form-input" id="tech" placeholder="Laravel, Vue.js, PostgreSQL" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Tavsif *</label>
+                            <textarea class="form-textarea" id="description" placeholder="Loyiha haqida qisqacha ma'lumot..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Asosiy Funksiyalar (har bir qator alohida funksiya)</label>
+                            <textarea class="form-textarea" id="features" placeholder="Buxgalteriya va moliyaviy hisobotlar
+Ombor boshqaruvi va inventarizatsiya
+HR moduli va ish haqi hisoblash"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Natijalar (har bir qator alohida natija)</label>
+                            <textarea class="form-textarea" id="results" placeholder="Hisob-kitob jarayonlari 70% tezlashdi
+Xatolar 85% kamaydi
+Oylik hisobotlar 5 daqiqada tayyor"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; margin-top: 30px;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Saqlash
+                            </button>
+                            <a href="projects.html" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Bekor qilish
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+        
+        // Get project ID from URL if editing
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id');
+        const isEditing = !!projectId;
+        
+        // Update page title
+        document.getElementById('pageTitle').textContent = isEditing ? 'Loyihani Tahrirlash' : 'Yangi Loyiha';
+        
+        // Load project data if editing
+        if (isEditing) {
+            const project = getProjectById(projectId);
+            if (project) {
+                document.getElementById('title').value = project.title;
+                document.getElementById('category').value = project.category;
+                document.getElementById('client').value = project.client;
+                document.getElementById('date').value = project.date;
+                document.getElementById('tech').value = project.tech.join(', ');
+                document.getElementById('description').value = project.description;
+                document.getElementById('features').value = project.features.join('\n');
+                document.getElementById('results').value = project.results.join('\n');
+            }
+        }
+        
+        // Form submission
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const projectData = {
+                title: document.getElementById('title').value,
+                category: document.getElementById('category').value,
+                client: document.getElementById('client').value,
+                date: document.getElementById('date').value,
+                tech: document.getElementById('tech').value.split(',').map(t => t.trim()),
+                description: document.getElementById('description').value,
+                features: document.getElementById('features').value.split('\n').filter(f => f.trim()),
+                results: document.getElementById('results').value.split('\n').filter(r => r.trim()),
+                status: 'completed'
+            };
+            
+            if (isEditing) {
+                updateProject(projectId, projectData);
+                alert('Loyiha muvaffaqiyatli yangilandi!');
+            } else {
+                addProject(projectData);
+                alert('Yangi loyiha qo\'shildi!');
+            }
+            
+            window.location.href = 'projects.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - NaqshSoft</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-logo">
+                <h1>NaqshSoft</h1>
+                <p>Admin Panel</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="username" placeholder="admin" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">
+                    <i class="fas fa-sign-in-alt"></i> Kirish
+                </button>
+
+                <div id="errorMessage" style="margin-top: 16px; padding: 12px; background: #fee; color: #f44; border-radius: 8px; display: none; text-align: center;">
+                </div>
+            </form>
+
+            <div style="margin-top: 30px; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                <p>Demo: username: <strong>admin</strong>, password: <strong>admin123</strong></p>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <div class="theme-toggle" style="margin: 0 auto;"><div class="theme-toggle-circle"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script>
+        // Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Simple authentication (demo purposes)
+            if (username === 'admin' && password === 'admin123') {
+                // Set session
+                localStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('adminUsername', username);
+                
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                errorMessage.textContent = 'Username yoki parol noto\'g\'ri!';
+                errorMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // Check if already logged in
+        if (localStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>
