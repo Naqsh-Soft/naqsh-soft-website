@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamkor Tahrirlash - Admin Panel</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <a href="dashboard.html" class="sidebar-logo">NaqshSoft</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="projects.html" class="nav-item">
+                    <i class="fas fa-folder"></i>
+                    <span>Loyihalar</span>
+                </a>
+                <a href="partners.html" class="nav-item active">
+                    <i class="fas fa-handshake"></i>
+                    <span>Hamkorlar</span>
+                </a>
+                <a href="messages.html" class="nav-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Xabarlar</span>
+                </a>
+                <a href="../index.html" class="nav-item" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    <span>Saytni ko'rish</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <h1 class="topbar-title" id="pageTitle">Yangi Hamkor</h1>
+                <div class="topbar-actions">
+                    <div class="theme-toggle"><div class="theme-toggle-circle"></div></div>
+                    <button onclick="logout()" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Chiqish
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="admin-content">
+                <div style="max-width: 600px;">
+                    <form id="partnerForm" style="background: var(--bg-primary); padding: 40px; border-radius: 16px; border: 1px solid var(--border);">
+                        
+                        <div class="form-group">
+                            <label class="form-label">Hamkor Nomi *</label>
+                            <input type="text" class="form-input" id="name" placeholder="Masalan: TechCorp" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Logotip (FontAwesome Class) *</label>
+                            <input type="text" class="form-input" id="logo" placeholder="Masalan: fas fa-building" required>
+                            <div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary);">
+                                <a href="https://fontawesome.com/icons" target="_blank" style="color: var(--accent);">FontAwesome Icons</a> dan ikonka tanlang.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Brend Rangi</label>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <input type="color" id="colorPicker" value="#0071E3" style="width: 50px; height: 40px; border: none; cursor: pointer;">
+                                <input type="text" class="form-input" id="color" placeholder="#0071E3" value="#0071E3" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Preview</label>
+                            <div id="previewCard" style="border: 1px dashed var(--border); padding: 20px; text-align: center; border-radius: 12px;">
+                                <div id="previewLogo" style="font-size: 3rem; margin-bottom: 12px; color: #0071E3;">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <h4 id="previewName">TechCorp</h4>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; margin-top: 30px;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Saqlash
+                            </button>
+                            <a href="partners.html" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Bekor qilish
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+        
+        // Get partner ID from URL if editing
+        const urlParams = new URLSearchParams(window.location.search);
+        const partnerId = urlParams.get('id');
+        const isEditing = !!partnerId;
+        
+        // Update page title
+        document.getElementById('pageTitle').textContent = isEditing ? 'Hamkorni Tahrirlash' : 'Yangi Hamkor';
+        
+        // Helper to update preview
+        function updatePreview() {
+            const name = document.getElementById('name').value || 'Hamkor Nomi';
+            const logo = document.getElementById('logo').value || 'fas fa-image';
+            const color = document.getElementById('color').value || '#0071E3';
+            
+            document.getElementById('previewName').textContent = name;
+            document.getElementById('previewLogo').innerHTML = `<i class="${logo}"></i>`;
+            document.getElementById('previewLogo').style.color = color;
+        }
+
+        // Add event listeners for preview
+        document.getElementById('name').addEventListener('input', updatePreview);
+        document.getElementById('logo').addEventListener('input', updatePreview);
+        document.getElementById('color').addEventListener('input', (e) => {
+            document.getElementById('colorPicker').value = e.target.value;
+            updatePreview();
+        });
+        document.getElementById('colorPicker').addEventListener('input', (e) => {
+            document.getElementById('color').value = e.target.value;
+            updatePreview();
+        });
+
+        // Load partner data if editing
+        if (isEditing) {
+            const partner = getPartnerById(partnerId);
+            if (partner) {
+                document.getElementById('name').value = partner.name;
+                document.getElementById('logo').value = partner.logo;
+                document.getElementById('color').value = partner.color;
+                document.getElementById('colorPicker').value = partner.color;
+                updatePreview();
+            }
+        }
+        
+        // Form submission
+        document.getElementById('partnerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const partnerData = {
+                name: document.getElementById('name').value,
+                logo: document.getElementById('logo').value,
+                color: document.getElementById('color').value
+            };
+            
+            if (isEditing) {
+                updatePartner(partnerId, partnerData);
+                alert('Hamkor muvaffaqiyatli yangilandi!');
+            } else {
+                addPartner(partnerData);
+                alert('Yangi hamkor qo\'shildi!');
+            }
+            
+            window.location.href = 'partners.html';
+        });
+    </script>
+</body>
+</html>

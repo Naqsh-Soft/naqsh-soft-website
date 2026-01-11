@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loyihalar - Admin Panel</title>
+    <title>Hamkorlar - Admin Panel</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,13 +21,17 @@
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="projects.html" class="nav-item active">
+                <a href="projects.html" class="nav-item">
                     <i class="fas fa-folder"></i>
                     <span>Loyihalar</span>
                 </a>
-                <a href="partners.html" class="nav-item">
+                <a href="partners.html" class="nav-item active">
                     <i class="fas fa-handshake"></i>
                     <span>Hamkorlar</span>
+                </a>
+                <a href="messages.html" class="nav-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Xabarlar</span>
                 </a>
                 <a href="../index.html" class="nav-item" target="_blank">
                     <i class="fas fa-globe"></i>
@@ -40,7 +44,7 @@
         <main class="admin-main">
             <!-- Topbar -->
             <div class="admin-topbar">
-                <h1 class="topbar-title">Loyihalar</h1>
+                <h1 class="topbar-title">Hamkorlar</h1>
                 <div class="topbar-actions">
                     <div class="theme-toggle"><div class="theme-toggle-circle"></div></div>
                     <button onclick="logout()" class="btn btn-secondary">
@@ -51,30 +55,28 @@
 
             <!-- Content -->
             <div class="admin-content">
-                <!-- Projects Table -->
+                <!-- Partners Table -->
                 <div class="table-container">
                     <div class="table-header">
-                        <h3 class="table-title">Barcha Loyihalar</h3>
-                        <a href="project-edit.html" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Yangi Loyiha
+                        <h3 class="table-title">Barcha Hamkorlar</h3>
+                        <a href="partner-edit.html" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Yangi Hamkor
                         </a>
                     </div>
                     <table>
                         <thead>
                             <tr>
+                                <th>Logotip</th>
+                                <th>Hamkor Nomi</th>
                                 <th>ID</th>
-                                <th>Loyiha Nomi</th>
-                                <th>Kategoriya</th>
-                                <th>Mijoz</th>
                                 <th>Sana</th>
-                                <th>Texnologiyalar</th>
                                 <th>Harakatlar</th>
                             </tr>
                         </thead>
-                        <tbody id="projectsTable">
+                        <tbody id="partnersTable">
                             <tr>
-                                <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                                    Loyihalar yuklanmoqda...
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                                    Hamkorlar yuklanmoqda...
                                 </td>
                             </tr>
                         </tbody>
@@ -90,51 +92,42 @@
         // Check authentication
         checkAuth();
         
-        // Initialize demo data
+        // Initialize demo data if needed
         initializeDemoData();
         
-        // Load all projects
-        function loadProjects() {
-            const projects = getProjects();
-            const tbody = document.getElementById('projectsTable');
+        // Load all partners
+        function loadPartners() {
+            const partners = getPartners();
+            const tbody = document.getElementById('partnersTable');
             
-            if (projects.length === 0) {
+            if (partners.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                            <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 16px; display: block;"></i>
-                            Hozircha loyihalar yo'q. <a href="project-edit.html">Yangi loyiha qo'shing</a>
+                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            <i class="fas fa-handshake" style="font-size: 3rem; margin-bottom: 16px; display: block;"></i>
+                            Hozircha hamkorlar yo'q. <a href="partner-edit.html">Yangi hamkor qo'shing</a>
                         </td>
                     </tr>
                 `;
                 return;
             }
             
-            tbody.innerHTML = projects.map((project, index) => `
+            tbody.innerHTML = partners.map(partner => `
                 <tr>
-                    <td><strong>#${index + 1}</strong></td>
-                    <td><strong>${project.title}</strong></td>
                     <td>
-                        <span style="background: var(--accent); color: #fff; padding: 6px 14px; border-radius: 12px; font-size: 0.85rem;">
-                            ${project.category.toUpperCase()}
-                        </span>
-                    </td>
-                    <td>${project.client}</td>
-                    <td>${project.date}</td>
-                    <td>
-                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                            ${project.tech.slice(0, 3).map(t => `
-                                <span style="background: var(--bg-secondary); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem;">${t}</span>
-                            `).join('')}
-                            ${project.tech.length > 3 ? `<span style="color: var(--text-secondary); font-size: 0.8rem;">+${project.tech.length - 3}</span>` : ''}
+                        <div style="width: 50px; height: 50px; border-radius: 10px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: ${partner.color || 'var(--accent)'};">
+                            <i class="${partner.logo}" style="font-size: 1.5rem;"></i>
                         </div>
                     </td>
+                    <td><strong>${partner.name}</strong></td>
+                    <td>#${partner.id}</td>
+                    <td>${new Date(partner.createdAt).toLocaleDateString()}</td>
                     <td>
                         <div class="table-actions">
-                            <a href="project-edit.html?id=${project.id}" class="btn-icon" title="Tahrirlash">
+                            <a href="partner-edit.html?id=${partner.id}" class="btn-icon" title="Tahrirlash">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <button onclick="deleteProjectConfirm('${project.id}')" class="btn-icon delete" title="O'chirish">
+                            <button onclick="deletePartnerConfirm('${partner.id}')" class="btn-icon delete" title="O'chirish">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -143,15 +136,15 @@
             `).join('');
         }
         
-        function deleteProjectConfirm(id) {
-            if (confirm('Loyihani o\'chirishni xohlaysizmi? Bu amalni qaytarib bo\'lmaydi!')) {
-                deleteProject(id);
-                loadProjects();
+        function deletePartnerConfirm(id) {
+            if (confirm('Hamkorni o\'chirishni xohlaysizmi?')) {
+                deletePartner(id);
+                loadPartners();
             }
         }
         
-        // Load projects on page load
-        loadProjects();
+        // Load partners on page load
+        loadPartners();
     </script>
 </body>
 </html>

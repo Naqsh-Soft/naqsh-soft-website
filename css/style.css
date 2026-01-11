@@ -14,10 +14,10 @@
     --accent-hover: #0077ED;
     --border: rgba(0, 0, 0, 0.1);
 
-    /* Glassmorphism */
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --glass-shadow: rgba(0, 0, 0, 0.1);
+    /* Glassmorphism - Liquid Glass */
+    --glass-bg: rgba(255, 255, 255, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: rgba(0, 0, 0, 0.15);
 
     /* Spacing */
     --nav-height: 70px;
@@ -39,9 +39,9 @@
     --accent-hover: #409CFF;
     --border: rgba(255, 255, 255, 0.1);
 
-    --glass-bg: rgba(30, 30, 30, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: rgba(0, 0, 0, 0.3);
+    --glass-bg: rgba(30, 30, 30, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: rgba(0, 0, 0, 0.4);
 }
 
 /* ==================== RESET ==================== */
@@ -122,14 +122,55 @@ a {
 .section {
     padding: var(--section-padding) 0;
     position: relative;
+    background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
+            rgba(0, 113, 227, 0.05),
+            transparent 40%);
 }
 
 .glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px var(--glass-shadow);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 8px 32px var(--glass-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Spotlight Effect */
+.glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y),
+            rgba(255, 255, 255, 0.8),
+            transparent 40%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.glass:hover::before {
+    opacity: 1;
+}
+
+.glass>* {
+    position: relative;
+    z-index: 2;
 }
 
 .btn {
@@ -139,7 +180,6 @@ a {
     font-weight: 500;
     font-size: 1rem;
     cursor: pointer;
-    transition: var(--transition);
     border: none;
     outline: none;
 }
@@ -173,7 +213,6 @@ a {
     width: 100%;
     height: var(--nav-height);
     z-index: 1000;
-    transition: var(--transition);
 }
 
 .navbar.scrolled {
@@ -426,7 +465,6 @@ a {
 .card {
     border-radius: 24px;
     padding: 40px;
-    transition: var(--transition);
     height: 100%;
     transform-style: preserve-3d;
     will-change: transform;
@@ -434,6 +472,17 @@ a {
 
 .card:hover {
     transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 16px 48px var(--glass-shadow),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.card:hover::before {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.5) 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.5) 100%);
 }
 
 .card.parallax-card {
@@ -496,6 +545,67 @@ a {
     background-size: cover;
     background-position: center;
     transition: transform 0.1s ease-out;
+}
+
+/* ==================== PARTNERS SECTION ==================== */
+.partners-carousel {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 40px 0;
+}
+
+.partners-track {
+    display: flex;
+    gap: 80px;
+    animation: scroll-partners 40s linear infinite;
+    width: fit-content;
+}
+
+.partners-track:hover {
+    animation-play-state: paused;
+}
+
+.partner-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    min-width: 150px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.partner-item:hover {
+    transform: scale(1.15);
+}
+
+.partner-item i {
+    font-size: 4rem;
+    color: var(--accent);
+    transition: var(--transition);
+}
+
+.partner-item:hover i {
+    color: var(--accent-hover);
+    transform: rotate(5deg);
+}
+
+.partner-item span {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+@keyframes scroll-partners {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 /* ==================== FOOTER ==================== */

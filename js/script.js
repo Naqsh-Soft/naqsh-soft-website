@@ -275,3 +275,17 @@ window.addEventListener('wheel', (e) => {
         isScrolling = false;
     }, 150);
 }, { passive: true });
+
+// ==================== CURSOR SPOTLIGHT EFFECT ====================
+document.addEventListener('mousemove', (e) => {
+    const cards = document.querySelectorAll('.card, .partner-item, .section');
+
+    cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+    });
+});

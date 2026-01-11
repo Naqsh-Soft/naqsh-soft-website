@@ -54,6 +54,47 @@ function getProjectById(id) {
     return projects.find(p => p.id === id);
 }
 
+// ==================== PARTNERS MANAGEMENT ====================
+function getPartners() {
+    const partners = localStorage.getItem('adminPartners');
+    return partners ? JSON.parse(partners) : [];
+}
+
+function savePartners(partners) {
+    localStorage.setItem('adminPartners', JSON.stringify(partners));
+}
+
+function addPartner(partner) {
+    const partners = getPartners();
+    partner.id = Date.now().toString();
+    partner.createdAt = new Date().toISOString();
+    partners.push(partner);
+    savePartners(partners);
+    return partner;
+}
+
+function updatePartner(id, updatedPartner) {
+    const partners = getPartners();
+    const index = partners.findIndex(p => p.id === id);
+    if (index !== -1) {
+        partners[index] = { ...partners[index], ...updatedPartner };
+        savePartners(partners);
+        return partners[index];
+    }
+    return null;
+}
+
+function deletePartner(id) {
+    const partners = getPartners();
+    const filtered = partners.filter(p => p.id !== id);
+    savePartners(filtered);
+}
+
+function getPartnerById(id) {
+    const partners = getPartners();
+    return partners.find(p => p.id === id);
+}
+
 // ==================== CONTACT MESSAGES MANAGEMENT ====================
 function getMessages() {
     const messages = localStorage.getItem('adminMessages');
@@ -144,4 +185,19 @@ function initializeDemoData() {
 
         saveProjects(demoProjects);
     }
+
+    // Initialize Partners Demo Data
+    const partners = getPartners();
+    if (partners.length === 0) {
+        const demoPartners = [
+            { id: '1', name: 'TechCorp', logo: 'fas fa-building', color: '#0071E3', createdAt: new Date().toISOString() },
+            { id: '2', name: 'InnovateLab', logo: 'fas fa-rocket', color: '#10B981', createdAt: new Date().toISOString() },
+            { id: '3', name: 'DataFlow', logo: 'fas fa-chart-line', color: '#F59E0B', createdAt: new Date().toISOString() },
+            { id: '4', name: 'GlobalTech', logo: 'fas fa-globe', color: '#8B5CF6', createdAt: new Date().toISOString() },
+            { id: '5', name: 'CloudSystems', logo: 'fas fa-cloud', color: '#06B6D4', createdAt: new Date().toISOString() },
+            { id: '6', name: 'SecureNet', logo: 'fas fa-shield-alt', color: '#EF4444', createdAt: new Date().toISOString() }
+        ];
+        savePartners(demoPartners);
+    }
 }
+
