@@ -3,32 +3,7 @@
 
 /* ==================== CSS VARIABLES ==================== */
 :root {
-    /* Light Mode Colors */
-    --bg-primary: #FFFFFF;
-    --bg-secondary: #F5F5F7;
-    --bg-tertiary: #E8E8ED;
-    --text-primary: #1D1D1F;
-    --text-secondary: #6E6E73;
-    --text-tertiary: #86868B;
-    --accent: #0071E3;
-    --accent-hover: #0077ED;
-    --border: rgba(0, 0, 0, 0.1);
-
-    /* Glassmorphism - Liquid Glass */
-    --glass-bg: rgba(255, 255, 255, 0.5);
-    --glass-border: rgba(255, 255, 255, 0.4);
-    --glass-shadow: rgba(0, 0, 0, 0.15);
-
-    /* Spacing */
-    --nav-height: 70px;
-    --section-padding: 120px;
-    --container-max: 1200px;
-
-    /* Transitions */
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-[data-theme="dark"] {
+    /* Dark Mode Colors (Default) */
     --bg-primary: #000000;
     --bg-secondary: #1D1D1F;
     --bg-tertiary: #2C2C2E;
@@ -39,9 +14,18 @@
     --accent-hover: #409CFF;
     --border: rgba(255, 255, 255, 0.1);
 
+    /* Glassmorphism - Liquid Glass */
     --glass-bg: rgba(30, 30, 30, 0.5);
     --glass-border: rgba(255, 255, 255, 0.2);
     --glass-shadow: rgba(0, 0, 0, 0.4);
+
+    /* Spacing */
+    --nav-height: 70px;
+    --section-padding: 120px;
+    --container-max: 1200px;
+
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==================== RESET ==================== */
@@ -697,6 +681,131 @@ a {
 }
 
 /* ==================== ANIMATIONS ==================== */
+/* ==================== ANIMATIONS ==================== */
+/* Base Animation Class */
+.animate-item {
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.animate-item.visible {
+    opacity: 1;
+    animation-fill-mode: forwards;
+    animation-duration: 0.8s;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 1. Fade In Up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up.visible {
+    animation-name: fadeInUp;
+}
+
+/* 2. Fade In Left */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fade-in-left.visible {
+    animation-name: fadeInLeft;
+}
+
+/* 3. Fade In Right */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fade-in-right.visible {
+    animation-name: fadeInRight;
+}
+
+/* 4. Zoom In */
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.zoom-in.visible {
+    animation-name: zoomIn;
+}
+
+/* 5. Flip In X (Good for cards) */
+@keyframes flipInX {
+    from {
+        opacity: 0;
+        transform: perspective(400px) rotateX(20deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: perspective(400px) rotateX(0);
+    }
+}
+
+.flip-in-x.visible {
+    animation-name: flipInX;
+}
+
+/* Stagger Delays */
+.delay-100.visible {
+    animation-delay: 0.1s;
+}
+
+.delay-200.visible {
+    animation-delay: 0.2s;
+}
+
+.delay-300.visible {
+    animation-delay: 0.3s;
+}
+
+.delay-400.visible {
+    animation-delay: 0.4s;
+}
+
+.delay-500.visible {
+    animation-delay: 0.5s;
+}
+
+.delay-600.visible {
+    animation-delay: 0.6s;
+}
+
+/* Keep legacy compatibility if needed, or replace usage */
 .fade-in {
     opacity: 0;
     transform: translateY(30px);
